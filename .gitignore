@@ -1,0 +1,11 @@
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+Desktop.ini
+*.prof
+*.out
+*~
+.DS_Store
+vendor/
