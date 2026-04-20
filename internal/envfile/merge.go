@@ -17,6 +17,11 @@ type MergeResult struct {
 	Updated []string
 }
 
+// HasChanges reports whether the merge resulted in any additions or updates.
+func (r MergeResult) HasChanges() bool {
+	return len(r.Added) > 0 || len(r.Updated) > 0
+}
+
 // Merge combines base and overlay env maps according to the given strategy.
 // Base entries are always preserved; overlay entries are added or merged per strategy.
 func Merge(base, overlay map[string]string, strategy MergeStrategy) MergeResult {
