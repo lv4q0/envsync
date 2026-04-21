@@ -51,6 +51,17 @@ func (a *AuditLog) Record(action AuditAction, key, oldVal, newVal string) {
 	})
 }
 
+// Filter returns a new AuditLog containing only entries that match the given action.
+func (a *AuditLog) Filter(action AuditAction) *AuditLog {
+	filtered := &AuditLog{}
+	for _, e := range a.Entries {
+		if e.Action == action {
+			filtered.Entries = append(filtered.Entries, e)
+		}
+	}
+	return filtered
+}
+
 // Summary returns a human-readable summary of all audit entries.
 func (a *AuditLog) Summary() string {
 	if len(a.Entries) == 0 {
