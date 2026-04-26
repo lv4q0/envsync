@@ -3,6 +3,7 @@ package sync
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 
 	"github.com/user/envsync/internal/diff"
@@ -74,10 +75,17 @@ func Sync(srcPath, dstPath string, opts Options) (*Result, error) {
 }
 
 // write serialises the map to a .env file.
+// Keys are sorted alphabetically to produce deterministic output.
 func write(path string, entries map[string]string) error {
+	keys := make([]string, 0, len(entries))
+	for k := range entries {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
 	var sb strings.Builder
-	for k, v := range entries {
-		fmt.Fprintf(&sb, "%s=%s\n", k, v)
+	for _, k := range keys {
+		fmt.Fprintf(&sb, "%s=%s\n", k, entries[k])
 	}
 	return os.WriteFile(path, []byte(sb.String()), 0o600)
 }
